@@ -1,4 +1,3 @@
-
 import requests
 
 from database import get_connection
@@ -7,15 +6,17 @@ from database import get_connection
 DUMMY_API = "https://dummyjson.com"
 
 
-# ==================================================
+# =========================================================
 # KEYWORDS
-# ==================================================
+# =========================================================
 
 ELECTRONICS_KEYWORDS = [
+
     "phone",
     "mobile",
     "iphone",
     "samsung",
+    "galaxy",
     "laptop",
     "computer",
     "tablet",
@@ -27,10 +28,12 @@ ELECTRONICS_KEYWORDS = [
     "television",
     "electronics",
     "macbook"
+
 ]
 
 
 FURNITURE_KEYWORDS = [
+
     "sofa",
     "chair",
     "table",
@@ -40,12 +43,13 @@ FURNITURE_KEYWORDS = [
     "wardrobe",
     "desk",
     "cupboard"
+
 ]
 
 
-# ==================================================
-# SEARCH LOCAL DATABASE
-# ==================================================
+# =========================================================
+# LOCAL DATABASE SEARCH
+# =========================================================
 
 def search_local_products(question):
 
@@ -55,7 +59,8 @@ def search_local_products(question):
 
     search = f"%{question}%"
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT *
         FROM products
         WHERE
@@ -63,22 +68,27 @@ def search_local_products(question):
             OR LOWER(category) LIKE ?
             OR LOWER(description) LIKE ?
         ORDER BY id DESC
-    """, (
-        search,
-        search,
-        search
-    ))
+        """,
+        (
+            search,
+            search,
+            search
+        )
+    )
 
     products = cursor.fetchall()
 
     connection.close()
 
-    return [dict(product) for product in products]
+    return [
+        dict(product)
+        for product in products
+    ]
 
 
-# ==================================================
-# SEARCH EXTERNAL API
-# ==================================================
+# =========================================================
+# EXTERNAL API SEARCH
+# =========================================================
 
 def search_external_products(query):
 
@@ -88,7 +98,9 @@ def search_external_products(query):
 
         response = requests.get(
             url,
-            params={"q": query},
+            params={
+                "q": query
+            },
             timeout=10
         )
 
@@ -106,9 +118,9 @@ def search_external_products(query):
     return []
 
 
-# ==================================================
+# =========================================================
 # FORMAT LOCAL PRODUCTS
-# ==================================================
+# =========================================================
 
 def format_local_products(products):
 
@@ -139,11 +151,14 @@ def format_local_products(products):
     return result
 
 
-# ==================================================
+# =========================================================
 # FORMAT EXTERNAL PRODUCTS
-# ==================================================
+# =========================================================
 
-def format_external_products(products, category):
+def format_external_products(
+    products,
+    category
+):
 
     result = []
 
@@ -176,27 +191,21 @@ def format_external_products(products, category):
     return result
 
 
-# ==================================================
+# =========================================================
 # CHATBOT
-# ==================================================
+# =========================================================
 
 def chatbot_response(question):
 
     question = question.lower().strip()
 
-
-    # ==================================================
-    # DETECT CATEGORY
-    # ==================================================
-
     category = None
 
     search_word = None
 
-
-    # --------------------------------------------------
+    # ---------------------------------------------
     # Electronics
-    # --------------------------------------------------
+    # ---------------------------------------------
 
     for word in ELECTRONICS_KEYWORDS:
 
@@ -208,10 +217,9 @@ def chatbot_response(question):
 
             break
 
-
-    # --------------------------------------------------
+    # ---------------------------------------------
     # Furniture
-    # --------------------------------------------------
+    # ---------------------------------------------
 
     if category is None:
 
@@ -225,10 +233,9 @@ def chatbot_response(question):
 
                 break
 
-
-    # ==================================================
-    # CATEGORY NOT FOUND
-    # ==================================================
+    # ---------------------------------------------
+    # Category not found
+    # ---------------------------------------------
 
     if category is None:
 
@@ -243,15 +250,13 @@ def chatbot_response(question):
 
         }
 
-
-    # ==================================================
-    # FIRST: SEARCH OUR OWN DATABASE
-    # ==================================================
+    # ---------------------------------------------
+    # Search local database
+    # ---------------------------------------------
 
     local_products = search_local_products(
         search_word
     )
-
 
     if local_products:
 
@@ -276,25 +281,22 @@ def chatbot_response(question):
 
         }
 
-
-    # ==================================================
-    # SECOND: SEARCH EXTERNAL API
-    # ==================================================
+    # ---------------------------------------------
+    # Search external API
+    # ---------------------------------------------
 
     external_products = search_external_products(
         search_word
     )
-
 
     products = format_external_products(
         external_products,
         category
     )
 
-
-    # ==================================================
-    # PRODUCT NOT FOUND
-    # ==================================================
+    # ---------------------------------------------
+    # Not found
+    # ---------------------------------------------
 
     if not products:
 
@@ -310,10 +312,9 @@ def chatbot_response(question):
 
         }
 
-
-    # ==================================================
-    # RETURN EXTERNAL PRODUCTS
-    # ==================================================
+    # ---------------------------------------------
+    # Return
+    # ---------------------------------------------
 
     return {
 

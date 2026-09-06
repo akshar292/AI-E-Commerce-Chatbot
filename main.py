@@ -12,29 +12,29 @@ app = FastAPI(
 )
 
 
-# ==================================================
+# =========================================================
 # CORS
-# ==================================================
+# =========================================================
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# ==================================================
-# CREATE DATABASE TABLES
-# ==================================================
+# =========================================================
+# DATABASE
+# =========================================================
 
 create_tables()
 
 
-# ==================================================
+# =========================================================
 # HOME
-# ==================================================
+# =========================================================
 
 @app.get("/")
 def home():
@@ -44,9 +44,9 @@ def home():
     }
 
 
-# ==================================================
-# CHATBOT API
-# ==================================================
+# =========================================================
+# CHATBOT
+# =========================================================
 
 @app.get("/chat")
 def chat(question: str):
@@ -54,9 +54,9 @@ def chat(question: str):
     return chatbot_response(question)
 
 
-# ==================================================
-# PRODUCT APIs
-# ==================================================
+# =========================================================
+# GET ALL PRODUCTS
+# =========================================================
 
 @app.get("/products")
 def get_products():
@@ -80,9 +80,9 @@ def get_products():
     return products
 
 
-# ==================================================
+# =========================================================
 # GET SINGLE PRODUCT
-# ==================================================
+# =========================================================
 
 @app.get("/products/{product_id}")
 def get_product(product_id: int):
@@ -91,7 +91,11 @@ def get_product(product_id: int):
     cursor = connection.cursor()
 
     cursor.execute(
-        "SELECT * FROM products WHERE id = ?",
+        """
+        SELECT *
+        FROM products
+        WHERE id = ?
+        """,
         (product_id,)
     )
 
@@ -109,9 +113,9 @@ def get_product(product_id: int):
     return dict(product)
 
 
-# ==================================================
+# =========================================================
 # ADD PRODUCT
-# ==================================================
+# =========================================================
 
 @app.post("/products")
 def add_product(product: ProductCreate):
@@ -130,14 +134,12 @@ def add_product(product: ProductCreate):
             detail="Category must be electronics or furniture."
         )
 
-
     if product.price < 0:
 
         raise HTTPException(
             status_code=400,
             detail="Price cannot be negative."
         )
-
 
     if product.stock < 0:
 
@@ -146,12 +148,18 @@ def add_product(product: ProductCreate):
             detail="Stock cannot be negative."
         )
 
+    if not product.name.strip():
+
+        raise HTTPException(
+            status_code=400,
+            detail="Product name is required."
+        )
 
     connection = get_connection()
     cursor = connection.cursor()
 
-
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT INTO products
         (
             name,
@@ -161,20 +169,15 @@ def add_product(product: ProductCreate):
             description
         )
         VALUES (?, ?, ?, ?, ?)
-    """, (
-
-        product.name,
-
-        category,
-
-        product.price,
-
-        product.stock,
-
-        product.description
-
-    ))
-
+        """,
+        (
+            product.name.strip(),
+            category,
+            product.price,
+            product.stock,
+            product.description.strip()
+        )
+    )
 
     connection.commit()
 
@@ -182,21 +185,15 @@ def add_product(product: ProductCreate):
 
     connection.close()
 
-
     return {
-
-        "message":
-            "Product added successfully",
-
-        "product_id":
-            product_id
-
+        "message": "Product added successfully",
+        "product_id": product_id
     }
 
 
-# ==================================================
+# =========================================================
 # DELETE PRODUCT
-# ==================================================
+# =========================================================
 
 @app.delete("/products/{product_id}")
 def delete_product(product_id: int):
@@ -204,19 +201,18 @@ def delete_product(product_id: int):
     connection = get_connection()
     cursor = connection.cursor()
 
-
     cursor.execute(
-        "DELETE FROM products WHERE id = ?",
+        """
+        DELETE FROM products
+        WHERE id = ?
+        """,
         (product_id,)
     )
 
-
-    connection.commit()
-
     deleted = cursor.rowcount
 
+    connection.commit()
     connection.close()
-
 
     if deleted == 0:
 
@@ -225,18 +221,14 @@ def delete_product(product_id: int):
             detail="Product not found"
         )
 
-
     return {
-
-        "message":
-            "Product deleted successfully"
-
+        "message": "Product deleted successfully"
     }
 
 
-# ==================================================
+# =========================================================
 # CREATE ORDER
-# ==================================================
+# =========================================================
 
 @app.post("/orders")
 def create_order(order: OrderCreate):
@@ -244,10 +236,9 @@ def create_order(order: OrderCreate):
     connection = get_connection()
     cursor = connection.cursor()
 
-
-    # ----------------------------------------------
-    # Validate quantity
-    # ----------------------------------------------
+    # ---------------------------------------------
+    # Quantity
+    # ---------------------------------------------
 
     if order.quantity <= 0:
 
@@ -258,10 +249,9 @@ def create_order(order: OrderCreate):
             detail="Quantity must be greater than 0."
         )
 
-
-    # ----------------------------------------------
-    # Validate customer name
-    # ----------------------------------------------
+    # ---------------------------------------------
+    # Customer name
+    # ---------------------------------------------
 
     if not order.customer_name.strip():
 
@@ -272,10 +262,9 @@ def create_order(order: OrderCreate):
             detail="Customer name is required."
         )
 
-
-    # ----------------------------------------------
+    # ---------------------------------------------
     # Find product
-    # ----------------------------------------------
+    # ---------------------------------------------
 
     cursor.execute(
         """
@@ -286,9 +275,7 @@ def create_order(order: OrderCreate):
         (order.product_id,)
     )
 
-
     product = cursor.fetchone()
-
 
     if not product:
 
@@ -299,10 +286,9 @@ def create_order(order: OrderCreate):
             detail="Product not found."
         )
 
-
-    # ----------------------------------------------
+    # ---------------------------------------------
     # Check stock
-    # ----------------------------------------------
+    # ---------------------------------------------
 
     if product["stock"] < order.quantity:
 
@@ -316,22 +302,21 @@ def create_order(order: OrderCreate):
             )
         )
 
-
-    # ----------------------------------------------
+    # ---------------------------------------------
     # Calculate total
-    # ----------------------------------------------
+    # ---------------------------------------------
 
     total_price = (
         product["price"] *
         order.quantity
     )
 
-
-    # ----------------------------------------------
+    # ---------------------------------------------
     # Create order
-    # ----------------------------------------------
+    # ---------------------------------------------
 
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT INTO orders
         (
             customer_name,
@@ -341,82 +326,52 @@ def create_order(order: OrderCreate):
             status
         )
         VALUES (?, ?, ?, ?, ?)
-    """, (
-
-        order.customer_name.strip(),
-
-        order.product_id,
-
-        order.quantity,
-
-        total_price,
-
-        "confirmed"
-
-    ))
-
+        """,
+        (
+            order.customer_name.strip(),
+            order.product_id,
+            order.quantity,
+            total_price,
+            "confirmed"
+        )
+    )
 
     order_id = cursor.lastrowid
 
-
-    # ----------------------------------------------
+    # ---------------------------------------------
     # Reduce stock
-    # ----------------------------------------------
+    # ---------------------------------------------
 
-    cursor.execute("""
+    cursor.execute(
+        """
         UPDATE products
         SET stock = stock - ?
         WHERE id = ?
-    """, (
-
-        order.quantity,
-
-        order.product_id
-
-    ))
-
+        """,
+        (
+            order.quantity,
+            order.product_id
+        )
+    )
 
     connection.commit()
-
     connection.close()
 
-
-    # ----------------------------------------------
-    # Response
-    # ----------------------------------------------
-
     return {
-
-        "message":
-            "Order created successfully",
-
-        "order_id":
-            order_id,
-
-        "customer_name":
-            order.customer_name,
-
-        "product":
-            product["name"],
-
-        "quantity":
-            order.quantity,
-
-        "price":
-            product["price"],
-
-        "total_price":
-            total_price,
-
-        "status":
-            "confirmed"
-
+        "message": "Order created successfully",
+        "order_id": order_id,
+        "customer_name": order.customer_name.strip(),
+        "product": product["name"],
+        "quantity": order.quantity,
+        "price": product["price"],
+        "total_price": total_price,
+        "status": "confirmed"
     }
 
 
-# ==================================================
+# =========================================================
 # GET ALL ORDERS
-# ==================================================
+# =========================================================
 
 @app.get("/orders")
 def get_orders():
@@ -424,8 +379,8 @@ def get_orders():
     connection = get_connection()
     cursor = connection.cursor()
 
-
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT
             orders.id,
             orders.customer_name,
@@ -439,16 +394,14 @@ def get_orders():
         JOIN products
         ON orders.product_id = products.id
         ORDER BY orders.id DESC
-    """)
-
+        """
+    )
 
     orders = [
         dict(row)
         for row in cursor.fetchall()
     ]
 
-
     connection.close()
-
 
     return orders

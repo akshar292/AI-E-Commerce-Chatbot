@@ -13,6 +13,7 @@
 
 </head>
 
+
 <body>
 
     <!-- SIDEBAR -->
@@ -23,28 +24,24 @@
             🛒 AI Shop
         </div>
 
+
         <button class="nav-btn active" onclick="showSection('productsSection')">
-
             📦 Products
-
         </button>
+
 
         <button class="nav-btn" onclick="showSection('ordersSection')">
-
             🛍 Orders
-
         </button>
+
 
         <button class="nav-btn" onclick="showSection('addSection')">
-
             ➕ Add Product
-
         </button>
 
+
         <button class="back-btn" onclick="goToChatbot()">
-
             ← Back to Chatbot
-
         </button>
 
     </div>
@@ -60,7 +57,9 @@
 
             <div>
 
-                <h1>Admin Panel</h1>
+                <h1>
+                    Admin Panel
+                </h1>
 
                 <p>
                     Manage electronics and furniture products
@@ -68,10 +67,9 @@
 
             </div>
 
+
             <button class="refresh-btn" onclick="loadAllData()">
-
                 🔄 Refresh
-
             </button>
 
         </div>
@@ -89,7 +87,9 @@
 
                 <div>
 
-                    <span>Total Products</span>
+                    <span>
+                        Total Products
+                    </span>
 
                     <h2 id="productCount">
                         0
@@ -108,7 +108,9 @@
 
                 <div>
 
-                    <span>Electronics</span>
+                    <span>
+                        Electronics
+                    </span>
 
                     <h2 id="electronicsCount">
                         0
@@ -127,7 +129,9 @@
 
                 <div>
 
-                    <span>Furniture</span>
+                    <span>
+                        Furniture
+                    </span>
 
                     <h2 id="furnitureCount">
                         0
@@ -146,7 +150,9 @@
 
                 <div>
 
-                    <span>Total Orders</span>
+                    <span>
+                        Total Orders
+                    </span>
 
                     <h2 id="orderCount">
                         0
@@ -242,8 +248,7 @@
                         Description
                     </label>
 
-                    <textarea id="description" placeholder="Enter product description">
-                    </textarea>
+                    <textarea id="description" placeholder="Enter product description"></textarea>
 
                 </div>
 
@@ -253,15 +258,12 @@
             <div class="form-actions">
 
                 <button class="cancel-btn" onclick="clearForm()">
-
                     Clear
-
                 </button>
 
+
                 <button class="add-btn" onclick="addProduct()">
-
                     ➕ Add Product
-
                 </button>
 
             </div>
@@ -287,10 +289,9 @@
 
                 </div>
 
+
                 <button class="small-btn" onclick="loadProducts()">
-
                     🔄 Refresh
-
                 </button>
 
             </div>
@@ -325,10 +326,9 @@
 
                 </div>
 
+
                 <button class="small-btn" onclick="loadOrders()">
-
                     🔄 Refresh
-
                 </button>
 
             </div>
