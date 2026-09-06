@@ -6,10 +6,7 @@ const API_URL = "https://ai-e-commerce-chatbot.onrender.com";
 // ==================================================
 
 function openAdmin() {
-
-    window.location.href =
-        "../admin/index.html";
-
+    window.location.href = "/admin/";
 }
 
 
