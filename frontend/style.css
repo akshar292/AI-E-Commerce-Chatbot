@@ -1,0 +1,430 @@
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background: #f3f4f6;
+
+}
+
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.container {
+
+    width: 875px;
+
+    max-width: 95%;
+
+    margin: 30px auto;
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 5px 25px rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+.header h1 {
+
+    margin: 0;
+
+    font-size: 32px;
+
+}
+
+
+.admin-button {
+
+    padding: 12px 20px;
+
+    background: #111827;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+}
+
+
+.admin-button:hover {
+
+    background: #1f2937;
+
+}
+
+
+/* =========================================
+   SUBTITLE
+========================================= */
+
+.subtitle {
+
+    text-align: center;
+
+    color: #777;
+
+    font-size: 19px;
+
+    margin-top: 25px;
+
+}
+
+
+/* =========================================
+   CHAT BOX
+========================================= */
+
+.chat-box {
+
+    height: 520px;
+
+    overflow-y: auto;
+
+    border: 1px solid #ddd;
+
+    padding: 25px;
+
+    margin-top: 20px;
+
+    border-radius: 12px;
+
+    background: #fafafa;
+
+}
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+.message {
+
+    padding: 13px 17px;
+
+    margin-bottom: 14px;
+
+    border-radius: 11px;
+
+    max-width: 80%;
+
+    white-space: pre-line;
+
+    font-size: 17px;
+
+    line-height: 1.5;
+
+}
+
+
+.bot {
+
+    background: #e5e7eb;
+
+    margin-right: auto;
+
+}
+
+
+.user {
+
+    background: #2563eb;
+
+    color: white;
+
+    margin-left: auto;
+
+}
+
+
+/* =========================================
+   INPUT
+========================================= */
+
+.input-area {
+
+    display: flex;
+
+    gap: 12px;
+
+    margin-top: 15px;
+
+}
+
+
+input {
+
+    flex: 1;
+
+    padding: 15px;
+
+    border-radius: 9px;
+
+    border: 1px solid #ccc;
+
+    font-size: 16px;
+
+    outline: none;
+
+}
+
+
+input:focus {
+
+    border-color: #2563eb;
+
+}
+
+
+.input-area button {
+
+    padding: 14px 28px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+}
+
+
+.input-area button:hover {
+
+    background: #1d4ed8;
+
+}
+
+
+/* =========================================
+   PRODUCT CARD
+========================================= */
+
+.product {
+
+    border: 1px solid #ddd;
+
+    padding: 18px;
+
+    margin: 12px 0;
+
+    border-radius: 12px;
+
+    background: white;
+
+    display: flex;
+
+    gap: 20px;
+
+    width: 100%;
+
+}
+
+
+.product img {
+
+    width: 140px;
+
+    height: 140px;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+}
+
+
+.product-info {
+
+    flex: 1;
+
+}
+
+
+.product h3 {
+
+    margin-top: 0;
+
+    margin-bottom: 10px;
+
+    font-size: 21px;
+
+}
+
+
+.product p {
+
+    margin: 7px 0;
+
+}
+
+
+.price {
+
+    font-size: 20px;
+
+    font-weight: bold;
+
+}
+
+
+.description {
+
+    color: #666;
+
+}
+
+
+/* =========================================
+   ORDER BUTTON
+========================================= */
+
+.order-button {
+
+    margin-top: 10px;
+
+    padding: 11px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #16a34a;
+
+    color: white;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+}
+
+
+.order-button:hover {
+
+    background: #15803d;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .container {
+
+        margin: 15px auto;
+
+        padding: 18px;
+
+    }
+
+
+    .header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        align-items: stretch;
+
+    }
+
+
+    .header h1 {
+
+        text-align: center;
+
+    }
+
+
+    .admin-button {
+
+        width: 100%;
+
+    }
+
+
+    .chat-box {
+
+        height: 500px;
+
+    }
+
+
+    .product {
+
+        flex-direction: column;
+
+    }
+
+
+    .product img {
+
+        width: 100%;
+
+        height: 180px;
+
+    }
+
+
+    .input-area {
+
+        flex-direction: column;
+
+    }
+
+
+    .input-area button {
+
+        width: 100%;
+
+    }
+
+}

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Shop - Admin Panel</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            🛒 AI Shop
+        </div>
+
+        <button class="nav-btn active" onclick="showSection('productsSection')">
+
+            📦 Products
+
+        </button>
+
+        <button class="nav-btn" onclick="showSection('ordersSection')">
+
+            🛍 Orders
+
+        </button>
+
+        <button class="nav-btn" onclick="showSection('addSection')">
+
+            ➕ Add Product
+
+        </button>
+
+        <button class="back-btn" onclick="goToChatbot()">
+
+            ← Back to Chatbot
+
+        </button>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- HEADER -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>Admin Panel</h1>
+
+                <p>
+                    Manage electronics and furniture products
+                </p>
+
+            </div>
+
+            <button class="refresh-btn" onclick="loadAllData()">
+
+                🔄 Refresh
+
+            </button>
+
+        </div>
+
+
+        <!-- DASHBOARD -->
+
+        <div class="dashboard">
+
+            <div class="card">
+
+                <div class="card-icon">
+                    📦
+                </div>
+
+                <div>
+
+                    <span>Total Products</span>
+
+                    <h2 id="productCount">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    💻
+                </div>
+
+                <div>
+
+                    <span>Electronics</span>
+
+                    <h2 id="electronicsCount">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    🛋️
+                </div>
+
+                <div>
+
+                    <span>Furniture</span>
+
+                    <h2 id="furnitureCount">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+                    🛍️
+                </div>
+
+                <div>
+
+                    <span>Total Orders</span>
+
+                    <h2 id="orderCount">
+                        0
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD PRODUCT -->
+
+        <section id="addSection" class="section hidden">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Add New Product
+                    </h2>
+
+                    <p>
+                        Add electronics or furniture to your store
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="form">
+
+                <div class="form-group">
+
+                    <label>
+                        Product Name
+                    </label>
+
+                    <input id="name" type="text" placeholder="e.g. iPhone 16">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select id="category">
+
+                        <option value="electronics">
+                            Electronics
+                        </option>
+
+                        <option value="furniture">
+                            Furniture
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Price
+                    </label>
+
+                    <input id="price" type="number" placeholder="e.g. 79999">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Stock
+                    </label>
+
+                    <input id="stock" type="number" placeholder="e.g. 50">
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea id="description" placeholder="Enter product description">
+                    </textarea>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button class="cancel-btn" onclick="clearForm()">
+
+                    Clear
+
+                </button>
+
+                <button class="add-btn" onclick="addProduct()">
+
+                    ➕ Add Product
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- PRODUCTS -->
+
+        <section id="productsSection" class="section">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Products
+                    </h2>
+
+                    <p>
+                        All products in your store
+                    </p>
+
+                </div>
+
+                <button class="small-btn" onclick="loadProducts()">
+
+                    🔄 Refresh
+
+                </button>
+
+            </div>
+
+
+            <div id="products">
+
+                <div class="loading">
+                    Loading products...
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ORDERS -->
+
+        <section id="ordersSection" class="section hidden">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+                        Orders
+                    </h2>
+
+                    <p>
+                        Customer orders
+                    </p>
+
+                </div>
+
+                <button class="small-btn" onclick="loadOrders()">
+
+                    🔄 Refresh
+
+                </button>
+
+            </div>
+
+
+            <div id="orders">
+
+                <div class="loading">
+                    Loading orders...
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>
